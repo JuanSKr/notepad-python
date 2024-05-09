@@ -12,7 +12,7 @@ def resource_path(relative_path):
     base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
     return os.path.join(base_path, relative_path)
 
-class VentanaPrincipal(QMainWindow):
+class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         with open(resource_path('resources/styles/style.qss'), 'r') as f:
@@ -20,107 +20,109 @@ class VentanaPrincipal(QMainWindow):
         self.setWindowTitle("Smooth Notepad")
         self.setMinimumSize(500, 400)
 
-        barra_menus = self.menuBar()
-        menu = barra_menus.addMenu("&Menu")
+        tool_bar = self.menuBar()
+        menu = tool_bar.addMenu("&Menu")
 
-        ruta_abrir = os.path.join(os.path.dirname(__file__), "resources/img/open.png")
-        ruta_guardar = os.path.join(os.path.dirname(__file__), "resources/img/save.png")
-        ruta_guardar_como = os.path.join(os.path.dirname(__file__), "resources/img/save_as.png")
-        ruta_salir = os.path.join(os.path.dirname(__file__), "resources/img/leave.png")
 
-        self.ruta = ""
+        # Change that to dictionary
+        open_path = os.path.join(os.path.dirname(__file__), "resources/img/open.png")
+        save_path = os.path.join(os.path.dirname(__file__), "resources/img/save.png")
+        save_as_path = os.path.join(os.path.dirname(__file__), "resources/img/save_as.png")
+        leave_path = os.path.join(os.path.dirname(__file__), "resources/img/leave.png")
 
-        abrir_archivo = QAction(QIcon(ruta_abrir), "&Open file", self)
-        abrir_archivo.setWhatsThis("Open a text file.")
-        abrir_archivo.setStatusTip("Open a  text file.")
-        abrir_archivo.setShortcut(QKeySequence("Ctrl+Q"))
-        abrir_archivo.triggered.connect(self.abrir_archivo)
-        menu.addAction(abrir_archivo)
+        self.path = ""
 
-        guardar_archivo = QAction(QIcon(ruta_guardar), "&Save file", self)
-        guardar_archivo.setWhatsThis("Save the file in the same path.")
-        guardar_archivo.setStatusTip("Save the file in the same path.")
-        guardar_archivo.setShortcut(QKeySequence("Ctrl+O"))
-        guardar_archivo.triggered.connect(self.guardar_archivo)
-        menu.addAction(guardar_archivo)
+        open_file = QAction(QIcon(open_path), "&Open file", self)
+        open_file.setWhatsThis("Open a text file.")
+        open_file.setStatusTip("Open a  text file.")
+        open_file.setShortcut(QKeySequence("Ctrl+Q"))
+        open_file.triggered.connect(self.open_file_def)
+        menu.addAction(open_file)
 
-        guardar_como = QAction(QIcon(ruta_guardar_como), "&Save as...", self)
-        guardar_como.setWhatsThis("Save the file in a path choosen by yourself.")
-        guardar_como.setStatusTip("Save the file in a path choose by yourself.")
-        guardar_como.setShortcut(QKeySequence("Ctrl+G"))
-        guardar_como.triggered.connect(self.guardar_como)
-        menu.addAction(guardar_como)
+        save_file = QAction(QIcon(save_path), "&Save file", self)
+        save_file.setWhatsThis("Save the file in the same path.")
+        save_file.setStatusTip("Save the file in the same path.")
+        save_file.setShortcut(QKeySequence("Ctrl+O"))
+        save_file.triggered.connect(self.save_def)
+        menu.addAction(save_file)
 
-        cerrar_programa = QAction(QIcon(ruta_salir), "&Close the program", self)
-        cerrar_programa.setWhatsThis("Close the program.")
-        cerrar_programa.setStatusTip("Close the program.")
-        cerrar_programa.setShortcut(QKeySequence("Ctrl+S"))
-        cerrar_programa.triggered.connect(self.cerrar_programa)
-        menu.addAction(cerrar_programa)
+        save_as = QAction(QIcon(save_as_path), "&Save as...", self)
+        save_as.setWhatsThis("Save the file in a path choosen by yourself.")
+        save_as.setStatusTip("Save the file in a path choose by yourself.")
+        save_as.setShortcut(QKeySequence("Ctrl+G"))
+        save_as.triggered.connect(self.save_as_def)
+        menu.addAction(save_as)
+
+        close_program = QAction(QIcon(leave_path), "&Close the program", self)
+        close_program.setWhatsThis("Close the program.")
+        close_program.setStatusTip("Close the program.")
+        close_program.setShortcut(QKeySequence("Ctrl+S"))
+        close_program.triggered.connect(self.close_program_def)
+        menu.addAction(close_program)
 
         self.statusBar()
 
-        barra_herramientas = QToolBar("Tools Bar")
-        barra_herramientas.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
-        barra_herramientas.addAction(abrir_archivo)
-        barra_herramientas.addAction(guardar_archivo)
-        barra_herramientas.addAction(guardar_como)
-        self.addToolBar(barra_herramientas)
+        toolbar = QToolBar("Tools Bar")
+        toolbar.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+        toolbar.addAction(open_file)
+        toolbar.addAction(save_file)
+        toolbar.addAction(save_as)
+        self.addToolBar(toolbar)
 
-        self.texto_dock = QTextEdit("")
+        self.dock_text = QTextEdit("")
         self.dock1 = QDockWidget()
         self.dock1.setWindowTitle(self.dock_title())
-        self.dock1.setWidget(self.texto_dock)
+        self.dock1.setWidget(self.dock_text)
         self.dock1.setMinimumWidth(50)
 
         self.addDockWidget(Qt.TopDockWidgetArea, self.dock1)
 
-    def guardar_como(self):
-        ruta, _ = QFileDialog.getSaveFileName(self, "Save file", "", "Text files (*.txt)")
+    def save_as_def(self):
+        path, _ = QFileDialog.getSaveFileName(self, "Save file", "", "Text files (*.txt)")
 
-        if ruta:
-            self.ruta = ruta
-            archivo = open(self.ruta, "w")
-            archivo.write(self.texto_dock.toPlainText())
-            archivo.close()
+        if path:
+            self.path = path
+            file = open(self.path, "w")
+            file.write(self.dock_text.toPlainText())
+            file.close()
 
-    def guardar_archivo(self):
-        if self.ruta:
-            with open(self.ruta, 'w') as file:
-                file.write(self.texto_dock.toPlainText())
+    def save_def(self):
+        if self.path:
+            with open(self.path, 'w') as file:
+                file.write(self.dock_text.toPlainText())
         else:
 
             file_name = 'textfile.txt'
             with open(file_name, 'w') as file:
-                file.write(self.texto_dock.toPlainText())
+                file.write(self.dock_text.toPlainText())
 
-    def abrir_archivo(self):
-        nueva_ruta, _ = QFileDialog.getOpenFileName(self, "Open file", "", "Text files (*.txt)")
+    def open_file_def(self):
+        new_path, _ = QFileDialog.getOpenFileName(self, "Open file", "", "Text files (*.txt)")
 
-        if nueva_ruta:
-            self.ruta = nueva_ruta
-            archivo = open(self.ruta, "r")
-            self.texto_dock.setText(archivo.read())
-            archivo.close()
+        if new_path:
+            self.path = new_path
+            file = open(self.path, "r")
+            self.dock_text.setText(file.read())
+            file.close()
             self.dock_title()
 
     def dock_title(self):
-        nombre_txt = self.obtener_nombre_txt()
-        if self.ruta == "":
+        name_txt = self.get_name_txt()
+        if self.path == "":
             return "New Document"
         else:
-            self.dock1.setWindowTitle(nombre_txt)
+            self.dock1.setWindowTitle(name_txt)
 
-    def obtener_nombre_txt(self):
-        nombre_txt = self.ruta.split("/")[-1]
-        return nombre_txt
+    def get_name_txt(self):
+        name_txt = self.path.split("/")[-1]
+        return name_txt
 
-    def cerrar_programa(self):
+    def close_program_def(self):
         self.close()
 
 
 if __name__ == '__main__':
     app = QApplication([])
-    ventana = VentanaPrincipal()
-    ventana.show()
+    window = MainWindow()
+    window.show()
     app.exec()

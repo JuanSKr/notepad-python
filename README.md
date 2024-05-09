@@ -8,13 +8,14 @@ This project is a fast and efficient notepad application built with Python. It p
 - **Modify Files**: Edit the content of opened text files.
 - **Save Files**: Save changes to the currently opened file.
 - **Save As**: Save the current text content to a new file.
+- **Dockable Text Window**: The text window is dockable and can be moved anywhere on the screen, independent of the main window.
 
 ## Getting Started
 To get started with this project, clone the repository and run the main Python file.
 
 ```bash
-git clone <repository-url>
-cd <repository-directory>
+git clone https://github.com/JuanSKr/notepad-python
+cd src
 python main.py
 ```
 

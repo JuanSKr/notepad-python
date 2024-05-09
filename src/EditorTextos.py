@@ -47,8 +47,8 @@ class MainWindow(QMainWindow):
         menu.addAction(save_file)
 
         save_as = QAction(QIcon(img_paths["save_as"]), "&Save as...", self)
-        save_as.setWhatsThis("Save the file in a path choosen by yourself.")
-        save_as.setStatusTip("Save the file in a path choose by yourself.")
+        save_as.setWhatsThis("Save the file in a path chosen by yourself.")
+        save_as.setStatusTip("Save the file in a path chosen by yourself.")
         save_as.setShortcut(QKeySequence("Ctrl+G"))
         save_as.triggered.connect(self.save_as_def)
         menu.addAction(save_as)

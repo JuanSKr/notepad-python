@@ -23,37 +23,37 @@ class MainWindow(QMainWindow):
         tool_bar = self.menuBar()
         menu = tool_bar.addMenu("&Menu")
 
-
-        # Change that to dictionary
-        open_path = os.path.join(os.path.dirname(__file__), "resources/img/open.png")
-        save_path = os.path.join(os.path.dirname(__file__), "resources/img/save.png")
-        save_as_path = os.path.join(os.path.dirname(__file__), "resources/img/save_as.png")
-        leave_path = os.path.join(os.path.dirname(__file__), "resources/img/leave.png")
+        img_paths ={
+            "open": os.path.join(os.path.dirname(__file__), "resources/img/open.png"),
+            "save": os.path.join(os.path.dirname(__file__), "resources/img/save.png"),
+            "save_as": os.path.join(os.path.dirname(__file__), "resources/img/save_as.png"),
+            "close": os.path.join(os.path.dirname(__file__), "resources/img/leave.png")
+        }
 
         self.path = ""
 
-        open_file = QAction(QIcon(open_path), "&Open file", self)
+        open_file = QAction(QIcon(img_paths["open"]), "&Open file", self)
         open_file.setWhatsThis("Open a text file.")
         open_file.setStatusTip("Open a  text file.")
         open_file.setShortcut(QKeySequence("Ctrl+Q"))
         open_file.triggered.connect(self.open_file_def)
         menu.addAction(open_file)
 
-        save_file = QAction(QIcon(save_path), "&Save file", self)
+        save_file = QAction(QIcon(img_paths["save"]), "&Save file", self)
         save_file.setWhatsThis("Save the file in the same path.")
         save_file.setStatusTip("Save the file in the same path.")
         save_file.setShortcut(QKeySequence("Ctrl+O"))
         save_file.triggered.connect(self.save_def)
         menu.addAction(save_file)
 
-        save_as = QAction(QIcon(save_as_path), "&Save as...", self)
+        save_as = QAction(QIcon(img_paths["save_as"]), "&Save as...", self)
         save_as.setWhatsThis("Save the file in a path choosen by yourself.")
         save_as.setStatusTip("Save the file in a path choose by yourself.")
         save_as.setShortcut(QKeySequence("Ctrl+G"))
         save_as.triggered.connect(self.save_as_def)
         menu.addAction(save_as)
 
-        close_program = QAction(QIcon(leave_path), "&Close the program", self)
+        close_program = QAction(QIcon(img_paths["close"]), "&Close the program", self)
         close_program.setWhatsThis("Close the program.")
         close_program.setStatusTip("Close the program.")
         close_program.setShortcut(QKeySequence("Ctrl+S"))
